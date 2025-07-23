@@ -219,7 +219,7 @@ const Home = ({ API_BASE_URL, currentUser, showGlobalMessage, updateNavCartCount
                                             {product.description || "No description."}
                                         </p>
                                         <p className="font-bold text-red-600 text-xl mb-3">
-                                            ${parseFloat(product.price).toFixed(2)}
+                                            ₹{parseFloat(product.price).toFixed(2)}
                                         </p>
                                         <div className="mt-auto flex flex-col sm:flex-row gap-2">
                                             <button
