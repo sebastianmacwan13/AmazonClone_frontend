@@ -96,6 +96,20 @@ const Navbar = ({ currentUser, cartCount, handleLogout }) => {
                     Profile
                   </NavLink>
                 </li>
+                {/* 👇 Corrected conditional rendering */}
+                {currentUser && currentUser.role === 'admin' && (
+                  <li>
+                    <NavLink to="/add-product"
+                      className={({ isActive }) =>
+                      `block text-center px-4 py-2 text-sm sm:text-base text-white rounded-md hover:bg-white hover:text-blue-600 transition font-medium
+                        ${isActive ? 'bg-green-500 text-blue-600' : ''}`
+                      }
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Add Product
+                    </NavLink>
+                  </li>
+                )}
                 <li className="w-full sm:w-3/4 md:w-auto lg:w-auto">
                   <button
                     onClick={() => {
