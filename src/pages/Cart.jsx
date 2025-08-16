@@ -152,7 +152,7 @@ const Cart = ({ API_BASE_URL, currentUser, showGlobalMessage, updateNavCartCount
                       />
                     </td>
                     <td className="px-2 py-3 sm:px-4 sm:py-3 font-semibold text-sm">
-                      {(parseFloat(item.product_price) * item.quantity).toFixed(2)}
+                      ₹{(parseFloat(item.product_price) * item.quantity).toFixed(2)}
                     </td>
                     <td className="px-2 py-3 sm:px-4 sm:py-3 text-sm">
                       <button
