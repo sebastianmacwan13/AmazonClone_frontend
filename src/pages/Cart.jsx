@@ -141,7 +141,7 @@ const Cart = ({ API_BASE_URL, currentUser, showGlobalMessage, updateNavCartCount
                       />
                       <span className="flex-grow min-w-0 truncate">{item.product_title}</span>
                     </td>
-                    <td className="px-2 py-3 sm:px-4 sm:py-3 text-sm">${parseFloat(item.product_price).toFixed(2)}</td>
+                    <td className="px-2 py-3 sm:px-4 sm:py-3 text-sm">₹{parseFloat(item.product_price).toFixed(2)}</td>
                     <td className="px-2 py-3 sm:px-4 sm:py-3 text-sm">
                       <input
                         type="number"
@@ -170,7 +170,7 @@ const Cart = ({ API_BASE_URL, currentUser, showGlobalMessage, updateNavCartCount
 
           {/* Subtotal + Checkout */}
           <div className="text-right mt-6">
-            <h4 className="text-xl sm:text-2xl font-semibold">Subtotal: ${subtotal.toFixed(2)}</h4>
+            <h4 className="text-xl sm:text-2xl font-semibold">Subtotal: ₹{subtotal.toFixed(2)}</h4>
             <button
               onClick={handleCheckout}
               className="mt-4 bg-green-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg hover:bg-green-700 text-base sm:text-lg"

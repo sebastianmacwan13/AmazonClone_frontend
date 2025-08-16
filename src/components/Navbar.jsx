@@ -97,7 +97,7 @@ const Navbar = ({ currentUser, cartCount, handleLogout }) => {
                   </NavLink>
                 </li>
                 {/* 👇 Corrected conditional rendering */}
-                {currentUser && currentUser.role === 'admin' && (
+                
                   <li>
                     <NavLink to="/add-product"
                       className={({ isActive }) =>
@@ -109,7 +109,7 @@ const Navbar = ({ currentUser, cartCount, handleLogout }) => {
                       Add Product
                     </NavLink>
                   </li>
-                )}
+             
                 <li className="w-full sm:w-3/4 md:w-auto lg:w-auto">
                   <button
                     onClick={() => {
