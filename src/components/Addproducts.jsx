@@ -229,7 +229,7 @@ const Addproducts = ({ onProductAdded }) => {
             value={formData.image}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border rounded-lg  text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div>
@@ -238,7 +238,7 @@ const Addproducts = ({ onProductAdded }) => {
             name="description"
             value={formData.description}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows="3"
           ></textarea>
         </div>
@@ -252,7 +252,7 @@ const Addproducts = ({ onProductAdded }) => {
             required
             min="0"
             step="0.01"
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div>
@@ -262,7 +262,7 @@ const Addproducts = ({ onProductAdded }) => {
             name="category"
             value={formData.category}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <button
