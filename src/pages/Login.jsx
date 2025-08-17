@@ -31,6 +31,7 @@ const Login = ({ API_BASE_URL, setCurrentUser, showGlobalMessage, updateNavCartC
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem("currentUser", JSON.stringify(data.user));
+        localStorage.setItem("token", data.token); // 👈 add this line
         setCurrentUser(data.user);
         showGlobalMessage(`Welcome back, ${data.user.username}!`, "success");
         await updateNavCartCount();
@@ -38,7 +39,7 @@ const Login = ({ API_BASE_URL, setCurrentUser, showGlobalMessage, updateNavCartC
       } else {
         showGlobalMessage(data.message || "Invalid credentials", "error");
         setTimeout(() => {
-          
+
           navigate("/signup");
         }, 2000);
       }
@@ -67,8 +68,8 @@ const Login = ({ API_BASE_URL, setCurrentUser, showGlobalMessage, updateNavCartC
               required
               placeholder="Enter your email"
               className={`mt-1 w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${validated && !email
-                  ? "border-red-500"
-                  : "border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                ? "border-red-500"
+                : "border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 }`}
             />
             {validated && !email && (
@@ -90,8 +91,8 @@ const Login = ({ API_BASE_URL, setCurrentUser, showGlobalMessage, updateNavCartC
               minLength={6}
               placeholder="Enter your password"
               className={`mt-1 w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${validated && (!password || password.length < 6)
-                  ? "border-red-500"
-                  : "border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                ? "border-red-500"
+                : "border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 }`}
             />
             {validated && (!password || password.length < 6) && (
