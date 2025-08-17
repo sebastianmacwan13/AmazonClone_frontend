@@ -30,9 +30,13 @@ const Login = ({ API_BASE_URL, setCurrentUser, showGlobalMessage, updateNavCartC
 
       const data = await res.json();
       if (res.ok) {
-        localStorage.setItem("currentUser", JSON.stringify(data.user));
-        localStorage.setItem("token", data.token); // 👈 add this line
-        setCurrentUser(data.user);
+        const userWithToken = { ...data.user, token: data.token };
+localStorage.setItem("currentUser", JSON.stringify(userWithToken));
+setCurrentUser(userWithToken);
+
+        // localStorage.setItem("currentUser", JSON.stringify(data.user));
+        // localStorage.setItem("token", data.token); // 👈 add this line
+        // setCurrentUser(data.user);
         showGlobalMessage(`Welcome back, ${data.user.username}!`, "success");
         await updateNavCartCount();
         navigate("/");
