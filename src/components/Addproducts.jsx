@@ -1,6 +1,6 @@
+//17/08/2025 morning
 // import React, { useState } from 'react';
 
-// // New component for adding a product, now in its own file.
 // const Addproducts = ({ onProductAdded }) => {
 //   const [formData, setFormData] = useState({
 //     title: '',
@@ -13,8 +13,8 @@
 
 //   const handleChange = (e) => {
 //     const { name, value } = e.target;
-//     setFormData(prevState => ({
-//       ...prevState,
+//     setFormData(prev => ({
+//       ...prev,
 //       [name]: value
 //     }));
 //   };
@@ -24,15 +24,21 @@
 //     setStatus('Adding product...');
 
 //     try {
-//       // NOTE: For a real application, you'd need a way to authenticate the admin user.
-//       // The backend you provided uses a `verifyAdmin` middleware, which would require
-//       // an authentication token in the headers. For this example, we'll assume
-//       // the middleware is disabled or a test token is used for demonstration.
-//       const response = await fetch('/api/products', {
-//         method: 'POST',
+//       // 🔑 Get token from localStorage
+//       const token = localStorage.getItem("token");
+//       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+//       // const token = currentUser?.token;
+
+//       if (!token) {
+//         setStatus("❌ No token found. Please login as admin.");
+//         return;
+//       }
+//       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+//       const response = await fetch(`${API_BASE_URL}/api/products`, {
+//         method: "POST",
 //         headers: {
-//           'Content-Type': 'application/json',
-//           // 'Authorization': `Bearer ${adminAuthToken}` // Example for a real app
+//           "Content-Type": "application/json",
+//           "Authorization": `Bearer ${token}`, // ✅ send token
 //         },
 //         body: JSON.stringify(formData),
 //       });
@@ -40,10 +46,10 @@
 //       const result = await response.json();
 
 //       if (!response.ok) {
-//         throw new Error(result.message || 'Failed to add product.');
+//         throw new Error(result.message || "Failed to add product.");
 //       }
 
-//       setStatus('Product added successfully!');
+//       setStatus("✅ Product added successfully!");
 //       setFormData({
 //         title: '',
 //         image: '',
@@ -51,12 +57,13 @@
 //         price: '',
 //         category: ''
 //       });
-//       // Call the parent function to refresh the product list
-//       onProductAdded();
 
-//     } catch (e) {
-//       console.error("Error adding product:", e);
-//       setStatus(`Error: ${e.message}`);
+//       // refresh parent list
+//       if (onProductAdded) onProductAdded();
+
+//     } catch (err) {
+//       console.error("Error adding product:", err);
+//       setStatus(`Error: ${err.message}`);
 //     }
 //   };
 
@@ -72,7 +79,7 @@
 //             value={formData.title}
 //             onChange={handleChange}
 //             required
-//             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+//             className="w-full px-4 py-2 border rounded-lg  text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
 //           />
 //         </div>
 //         <div>
@@ -83,7 +90,7 @@
 //             value={formData.image}
 //             onChange={handleChange}
 //             required
-//             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+//             className="w-full px-4 py-2 border rounded-lg  text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
 //           />
 //         </div>
 //         <div>
@@ -92,12 +99,12 @@
 //             name="description"
 //             value={formData.description}
 //             onChange={handleChange}
-//             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+//             className="w-full px-4 py-2 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
 //             rows="3"
 //           ></textarea>
 //         </div>
 //         <div>
-//           <label className="block text-gray-700 font-medium mb-1">Price ($)</label>
+//           <label className="block text-gray-700 font-medium mb-1">Price (₹)</label>
 //           <input
 //             type="number"
 //             name="price"
@@ -106,7 +113,7 @@
 //             required
 //             min="0"
 //             step="0.01"
-//             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+//             className="w-full px-4 py-2 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
 //           />
 //         </div>
 //         <div>
@@ -116,7 +123,7 @@
 //             name="category"
 //             value={formData.category}
 //             onChange={handleChange}
-//             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-2 focus:ring-blue-500"
+//             className="w-full px-4 py-2 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
 //           />
 //         </div>
 //         <button
@@ -137,7 +144,6 @@
 
 // export default Addproducts;
 
-//17/08/2025 morning
 import React, { useState } from 'react';
 
 const Addproducts = ({ onProductAdded }) => {
@@ -149,6 +155,9 @@ const Addproducts = ({ onProductAdded }) => {
     category: ''
   });
   const [status, setStatus] = useState('');
+
+  // ✅ Shared categories for dropdown
+  const categories = ["Electronics", "Clothing", "Books", "Furniture", "Toys", "Sports", "Other"];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -166,7 +175,6 @@ const Addproducts = ({ onProductAdded }) => {
       // 🔑 Get token from localStorage
       const token = localStorage.getItem("token");
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-      // const token = currentUser?.token;
 
       if (!token) {
         setStatus("❌ No token found. Please login as admin.");
@@ -255,16 +263,26 @@ const Addproducts = ({ onProductAdded }) => {
             className="w-full px-4 py-2 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+
+        {/* 🔽 Category Dropdown */}
         <div>
           <label className="block text-gray-700 font-medium mb-1">Category</label>
-          <input
-            type="text"
+          <select
             name="category"
             value={formData.category}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+            required
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </div>
+
         <button
           type="submit"
           className="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition-colors"

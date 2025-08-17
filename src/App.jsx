@@ -14,8 +14,9 @@ import ForgotPassword from './pages/Forgot-password.jsx';
 import Reset_password from './pages/Reset_password.jsx';
 import Contactform from './pages/Contact';
 import Addproducts from './components/Addproducts.jsx';
+import AdminDashboard from './pages/AdminDashboard.jsx';
 
-// const API_BASE_URL = "https://amazon-clone-fullstack.onrender.com";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 
@@ -208,7 +209,7 @@ const App = () => {
     path="/add-product"
     element={<Addproducts onProductAdded={() => console.log("Product added")} />}
 />
-
+<Route path="/admin" element={<AdminDashboard />} />
             </Routes>
             <Footer />
         </div>
