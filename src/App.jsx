@@ -83,6 +83,7 @@ const App = () => {
     }, [currentUser, API_BASE_URL, updateNavCartCount]);
 
     const handleLogout = () => {
+         localStorage.removeItem("token");  
         localStorage.removeItem("currentUser");
         setCurrentUser(null);
         setCartCount(0); // Reset cart count on logout
