@@ -12,47 +12,98 @@ const Login = ({ API_BASE_URL, setCurrentUser, showGlobalMessage, updateNavCartC
     // Future enhancement: Redirect if already logged in
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setValidated(true);
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setValidated(true);
 
-    if (!email || !password || password.length < 6) {
-      showGlobalMessage("Please enter valid email and a password of at least 6 characters.", "error");
-      return;
+//     if (!email || !password || password.length < 6) {
+//       showGlobalMessage("Please enter valid email and a password of at least 6 characters.", "error");
+//       return;
+//     }
+
+//     try {
+//       const res = await fetch(`${API_BASE_URL}/api/login`, {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ email, password }),
+//       });
+
+//       const data = await res.json();
+//       if (res.ok) {
+//         const userWithToken = { ...data.user, token: data.token };
+// localStorage.setItem("currentUser", JSON.stringify(userWithToken));
+// //  localStorage.setItem("token", data.token);   // 👈 ADD THIS
+// setCurrentUser(userWithToken);
+// localStorage.setItem("token", data.token);
+// localStorage.setItem("currentUser", JSON.stringify(data.user));
+
+
+//         // localStorage.setItem("currentUser", JSON.stringify(data.user));
+//         // localStorage.setItem("token", data.token); // 👈 add this line
+//         // setCurrentUser(data.user);
+//         showGlobalMessage(`Welcome back, ${data.user.username}!`, "success");
+//         await updateNavCartCount();
+//         navigate("/");
+//       } else {
+//         showGlobalMessage(data.message || "Invalid credentials", "error");
+//         setTimeout(() => {
+
+//           navigate("/signup");
+//         }, 2000);
+//       }
+//     } catch (err) {
+//       console.error("Login network error:", err);
+//       showGlobalMessage("Login failed. Check your network or try again later.", "error");
+//     }
+//   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setValidated(true);
+
+  if (!email || !password || password.length < 6) {
+    showGlobalMessage(
+      "Please enter valid email and a password of at least 6 characters.",
+      "error"
+    );
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      // ✅ Save token separately
+      localStorage.setItem("token", data.token);
+
+      // ✅ Save user with token combined (optional but nice)
+      const userWithToken = { ...data.user, token: data.token };
+      localStorage.setItem("currentUser", JSON.stringify(userWithToken));
+
+      // ✅ Set in context
+      setCurrentUser(userWithToken);
+
+      showGlobalMessage(`Welcome back, ${data.user.username}!`, "success");
+      await updateNavCartCount();
+      navigate("/");
+    } else {
+      showGlobalMessage(data.message || "Invalid credentials", "error");
+      setTimeout(() => navigate("/signup"), 2000);
     }
+  } catch (err) {
+    console.error("Login network error:", err);
+    showGlobalMessage(
+      "Login failed. Check your network or try again later.",
+      "error"
+    );
+  }
+};
 
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        const userWithToken = { ...data.user, token: data.token };
-localStorage.setItem("currentUser", JSON.stringify(userWithToken));
- localStorage.setItem("token", data.token);   // 👈 ADD THIS
-setCurrentUser(userWithToken);
-
-        // localStorage.setItem("currentUser", JSON.stringify(data.user));
-        // localStorage.setItem("token", data.token); // 👈 add this line
-        // setCurrentUser(data.user);
-        showGlobalMessage(`Welcome back, ${data.user.username}!`, "success");
-        await updateNavCartCount();
-        navigate("/");
-      } else {
-        showGlobalMessage(data.message || "Invalid credentials", "error");
-        setTimeout(() => {
-
-          navigate("/signup");
-        }, 2000);
-      }
-    } catch (err) {
-      console.error("Login network error:", err);
-      showGlobalMessage("Login failed. Check your network or try again later.", "error");
-    }
-  };
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen px-4">

@@ -83,10 +83,13 @@ useEffect(() => {
         localStorage.setItem(`avatar_${currentUser.id}`, base64Image);
 
         // 🔥 Send image URL to backend to store in DB
+        const token = localStorage.getItem("token");  // 👈 add this line
         try {
           const res = await fetch(`${API_BASE_URL}/api/user/update-avatar`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
             body: JSON.stringify({ id: currentUser.id, profileUrl: base64Image }),
           });
           const data = await res.json();
@@ -236,11 +239,13 @@ useEffect(() => {
               if (url.startsWith("http") || url.startsWith("data:image")) {
                 setAvatarPreview(url);
                 localStorage.setItem(`avatar_${currentUser.id}`, url);
-
+const token = localStorage.getItem("token");  // 👈 add this line
                 try {
                   const res = await fetch(`${API_BASE_URL}/api/user/update-avatar`, {
                     method: "PUT",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`, 
+                     },
                     body: JSON.stringify({ id: currentUser.id, profileUrl: url }),
                   });
 
