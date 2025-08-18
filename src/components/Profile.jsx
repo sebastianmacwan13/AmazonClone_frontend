@@ -13,28 +13,64 @@ const Profile = ({ currentUser, setCurrentUser, API_BASE_URL, showGlobalMessage 
   const [avatarPreview, setAvatarPreview] = useState('https://placehold.co/120x120?text=Avatar');
   const [activeTab, setActiveTab] = useState('info');
 
-  useEffect(() => {
-    if (!currentUser) {
+  // useEffect(() => {
+  //   if (!currentUser) {
+  //     showGlobalMessage("Please log in to view your profile.", "error");
+  //     navigate("/login");
+  //     return;
+  //   }
+
+  //   setProfileUsername(currentUser.username || '');
+  //   setProfileEmail(currentUser.email || '');
+
+  //   // ✅ First try to load from backend
+  //   if (currentUser.profileurl) {
+  //     setAvatarPreview(currentUser.profileurl);
+  //   } else {
+  //     // Fallback to localStorage
+  //     const avatarKey = `avatar_${currentUser.id}`;
+  //     const savedAvatar = localStorage.getItem(avatarKey);
+  //     if (savedAvatar) {
+  //       setAvatarPreview(savedAvatar);
+  //     }
+  //   }
+  // }, [currentUser, navigate, showGlobalMessage]);
+useEffect(() => {
+  const loadProfile = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
       showGlobalMessage("Please log in to view your profile.", "error");
       navigate("/login");
       return;
     }
 
-    setProfileUsername(currentUser.username || '');
-    setProfileEmail(currentUser.email || '');
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/profile`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
 
-    // ✅ First try to load from backend
-    if (currentUser.profileurl) {
-      setAvatarPreview(currentUser.profileurl);
-    } else {
-      // Fallback to localStorage
-      const avatarKey = `avatar_${currentUser.id}`;
-      const savedAvatar = localStorage.getItem(avatarKey);
-      if (savedAvatar) {
-        setAvatarPreview(savedAvatar);
+      if (res.ok) {
+        setProfileUsername(data.username);
+        setProfileEmail(data.email);
+        setAvatarPreview(data.profileurl || "https://placehold.co/120x120?text=Avatar");
+
+        const updatedUser = { ...data };
+        localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+        setCurrentUser?.(updatedUser);
+      } else {
+        showGlobalMessage(data.message || "Failed to load profile.", "error");
+        navigate("/login");
       }
+    } catch (err) {
+      console.error("Profile fetch error:", err);
+      showGlobalMessage("Network error loading profile", "error");
+      navigate("/login");
     }
-  }, [currentUser, navigate, showGlobalMessage]);
+  };
+
+  loadProfile();
+}, [API_BASE_URL, navigate, setCurrentUser, showGlobalMessage]);
 
 
   const handleAvatarChange = async (e) => {

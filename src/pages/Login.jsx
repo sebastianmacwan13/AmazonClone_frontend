@@ -32,6 +32,7 @@ const Login = ({ API_BASE_URL, setCurrentUser, showGlobalMessage, updateNavCartC
       if (res.ok) {
         const userWithToken = { ...data.user, token: data.token };
 localStorage.setItem("currentUser", JSON.stringify(userWithToken));
+ localStorage.setItem("token", data.token);   // 👈 ADD THIS
 setCurrentUser(userWithToken);
 
         // localStorage.setItem("currentUser", JSON.stringify(data.user));
