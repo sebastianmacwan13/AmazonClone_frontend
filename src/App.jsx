@@ -82,14 +82,50 @@ const App = () => {
         updateNavCartCount();
     }, [currentUser, API_BASE_URL, updateNavCartCount]);
 
-    const handleLogout = () => {
-         localStorage.removeItem("token");  
-        localStorage.removeItem("currentUser");
-        setCurrentUser(null);
-        setCartCount(0); // Reset cart count on logout
-        showGlobalMessage("Logged out successfully!", "success");
-    };
+    // const handleLogout = () => {
+    //      localStorage.removeItem("token");  
+    //     localStorage.removeItem("currentUser");
+    //     setCurrentUser(null);
+    //     setCartCount(0); // Reset cart count on logout
+    //     showGlobalMessage("Logged out successfully!", "success");
+    // };
+    const handleLogout = async () => {
+        try {
+            // Step 1: Tell the server to invalidate the session.
+            // This is the crucial missing piece. It ensures the backend also logs the user out.
+            const response = await fetch(`${API_BASE_URL}/api/logout`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    // Send the token so the server knows which session to end.
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
 
+            if (!response.ok) {
+                console.error("Server-side logout failed:", response.statusText);
+                // We'll still proceed with client-side logout to be safe.
+            }
+
+            // Step 2: Clear state first. This immediately triggers a re-render.
+            setCurrentUser(null);
+            setCartCount(0);
+            
+            // Step 3: Then, clear localStorage.
+            localStorage.removeItem("token");
+            localStorage.removeItem("currentUser");
+
+            showGlobalMessage("Logged out successfully!", "success");
+        } catch (error) {
+            console.error("Network or server error during logout:", error);
+            // It's a good practice to still clear client-side state even if the server call fails.
+            setCurrentUser(null);
+            setCartCount(0);
+            localStorage.removeItem("token");
+            localStorage.removeItem("currentUser");
+            showGlobalMessage("Logged out, but a network error occurred.", "error");
+        }
+    };
     return (
         <div> {/* No <Router> here; it should be in index.js */}
             <Navbar
